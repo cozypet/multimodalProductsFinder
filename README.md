@@ -18,7 +18,8 @@ Internet connection for API calls to OpenAI
 Environment Variables: Set MONGO_URI and OPENAI_API_KEY in your environment.
 Install Dependencies: Run pip install -r requirements.txt (assuming a requirements.txt file with necessary libraries is present).
 ### Usage
-Start the Application: Run streamlit run [app_file_name].py.
+Start the Application: 
+```Run streamlit run [app_file_name].py```
 Use the Interface: Navigate through the sidebar menu to upload images, extract product details, or perform a vector search.
 ### Functions
 #### get_embedding(text, model): Gets the embedding for a given text using OpenAI's API.
