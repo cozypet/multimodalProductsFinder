@@ -4,16 +4,16 @@ Smart Products Finder is an AI-powered application that uses Streamlit for the f
 
 ### Features
 ##### Image Upload: Users can upload product images for analysis.
-AI Analysis of Images: Leverages OpenAI's GPT-4 Vision model to analyze uploaded images and extract product details.
-Text Embedding and Vector Search: Utilizes OpenAI's embedding model to convert text to embeddings, and performs vector searches in MongoDB to find similar products.
-Streamlit Interface: Offers an easy-to-use web interface for interacting with the application.
+##### AI Analysis of Images: Leverages OpenAI's GPT-4 Vision model to analyze uploaded images and extract product details.
+##### Text Embedding and Vector Search: Utilizes OpenAI's embedding model to convert text to embeddings, and performs vector searches in MongoDB to find similar products.
+##### Streamlit Interface: Offers an easy-to-use web interface for interacting with the application.
 ### Requirements
-Python 3.6 or later
-Streamlit
-OpenAI Python Library
-Pymongo
-MongoDB server access
-Internet connection for API calls to OpenAI
+1. Python 3.6 or later
+2. Streamlit
+3. OpenAI Python Library
+4. Pymongo
+5. MongoDB server access
+6. Internet connection for API calls to OpenAI
 ### Setup
 Environment Variables: Set MONGO_URI and OPENAI_API_KEY in your environment.
 Install Dependencies: Run pip install -r requirements.txt (assuming a requirements.txt file with necessary libraries is present).
