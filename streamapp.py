@@ -1,17 +1,45 @@
 import streamlit as st
+import openai
 from pymongo import MongoClient
 import os
 import base64
 import requests
 
 
-# MongoDB setup (replace 'your_mongodb_uri' and 'your_database_name' with your actual MongoDB URI and database name)
+# MongoDB and OPENAI setup 
 MONGO_URI = os.environ["MONGO_URI"]
-mongo_client = MongoClient(MONGO_URI)
-db = mongo_client.products
-collection = db["products"]
 
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
+
+# Function to get the embedding for a given text using OpenAI's API.
+def get_embedding(text, model="text-embedding-ada-002"):
+    text = text.replace("\n", " ")
+    return openai.Embedding.create(input=[text], model=model)['data'][0]['embedding']
+
+# Connect to the MongoDB server and return the collection.
+def connect_mongodb():
+    mongo_client = MongoClient(MONGO_URI)
+    db = mongo_client["produit"]
+    collection = db["products"]
+    return collection
+
+# Function to find similar documents in MongoDB based on the provided embedding.
+def find_similar_documents(embedding):
+    collection = connect_mongodb()
+    documents = list(collection.aggregate([
+        {
+        "$vectorSearch": {
+            "index": "vector_index",
+            "path": "embedding",
+            "queryVector": embedding,
+            "numCandidates": 10,
+            "limit": 10,
+            "filter": {"document_type": "child"}
+            }
+        },
+        {"$project": {"_id": 0, "name": 1, "subcategory" :1, "model" :1, "id":1 }}
+    ]))
+    return documents
 
 # Function to encode the image to base64
 def encode_image(image_bytes):
