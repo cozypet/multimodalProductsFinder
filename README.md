@@ -21,14 +21,14 @@ Install Dependencies: Run pip install -r requirements.txt (assuming a requiremen
 Start the Application: Run streamlit run [app_file_name].py.
 Use the Interface: Navigate through the sidebar menu to upload images, extract product details, or perform a vector search.
 ### Functions
-get_embedding(text, model): Gets the embedding for a given text using OpenAI's API.
-connect_mongodb(): Connects to MongoDB and returns the collection.
-find_similar_documents(embedding): Finds similar documents in MongoDB based on the provided embedding.
-encode_image(image_bytes): Encodes the image to base64.
-analyze_image(image_bytes, user_prompt): Analyzes the image with OpenAI's GPT-4 Vision model.
-upload_photo(): Handles image uploads.
-products_from_photo(): Extracts products from an uploaded photo.
-show_products(): Displays products after a vector search.
+#### get_embedding(text, model): Gets the embedding for a given text using OpenAI's API.
+#### connect_mongodb(): Connects to MongoDB and returns the collection.
+#### find_similar_documents(embedding): Finds similar documents in MongoDB based on the provided embedding.
+#### encode_image(image_bytes): Encodes the image to base64.
+#### analyze_image(image_bytes, user_prompt): Analyzes the image with OpenAI's GPT-4 Vision model.
+#### upload_photo(): Handles image uploads.
+#### products_from_photo(): Extracts products from an uploaded photo.
+#### show_products(): Displays products after a vector search.
 ### Disclaimer
 The application requires a valid OpenAI API key and MongoDB URI.
 The performance and accuracy of the AI model depend on the OpenAI's GPT-4 Vision model capabilities and the quality of data in MongoDB.
