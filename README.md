@@ -21,6 +21,7 @@ Install Dependencies: Run pip install -r requirements.txt (assuming a requiremen
 Start the Application: 
 ```Run streamlit run [app_file_name].py```
 Use the Interface: Navigate through the sidebar menu to upload images, extract product details, or perform a vector search.
+```http://localhost:8501/```
 ### Functions
 #### get_embedding(text, model): Gets the embedding for a given text using OpenAI's API.
 #### connect_mongodb(): Connects to MongoDB and returns the collection.
