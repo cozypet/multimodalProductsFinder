@@ -1,19 +1,50 @@
-# multimodalProductsFinder
-### Introduction
-Smart Products Finder is an AI-powered application that uses Streamlit for the frontend, MongoDB for data storage, and OpenAI's large language models for analyzing images and text. It offers a user-friendly interface to upload product photos, extract product details using AI, and perform vector searches on a MongoDB database to find similar products.
+# Mongo Multimodal Smart Products Finder
 
-### Features
-##### Image Upload: Users can upload product images for analysis.
-##### AI Analysis of Images: Leverages OpenAI's GPT-4 Vision model to analyze uploaded images and extract product details.
-##### Text Embedding and Vector Search: Utilizes OpenAI's embedding model to convert text to embeddings, and performs vector searches in MongoDB to find similar products.
-##### Streamlit Interface: Offers an easy-to-use web interface for interacting with the application.
-### Requirements
-1. Python 3.6 or later
-2. Streamlit
-3. OpenAI Python Library
-4. Pymongo
-5. MongoDB server access
-6. Internet connection for API calls to OpenAI
+My Smart Products Finder is an advanced AI-powered application designed to revolutionize your fashion and retail experience. With a sleek, user-friendly interface, this app provides detailed insights into fashion products, interactive recommendations, and up-to-date fashion data analysis.
+
+## Features
+
+- **AI-Powered Product Analysis**: Utilize state-of-the-art AI to gain detailed insights into various fashion products from just a photo.
+- **Interactive Product Recommendations**: Receive instant, AI-driven product recommendations that align with your style and preferences.
+- **Visual Product Uploads**: Easily upload product images and let the AI provide you with detailed analysis and descriptions.
+- **Customizable Search Experience**: Tailor your search with filters to find exactly what you're looking for in the vast fashion landscape.
+- **User-Friendly Interface**: Navigate through the app with ease, thanks to the intuitive layout and design.
+- **Up-to-Date Fashion Data**: Stay informed with the latest fashion trends, prices, and popular styles.
+
+## Getting Started
+
+To get started with My Smart Products Finder, follow these instructions:
+
+### Prerequisites
+
+Ensure you have the following installed:
+- Python 3.10 
+- Pip package manager
+- MongoDB
+- OpenAI API key
+
+### Installation
+
+Clone the repository to your local machine:
+```bash
+git clone https://github.com/your-username/my-smart-products-finder.git
+cd my-smart-products-finder
+```
+
+Install the required Python packages:
+```
+pip install -r requirements.txt
+```
+
+Set your environment variables for MONGO_URI and OPENAI_API_KEY:
+```
+export MONGO_URI="your_mongodb_uri"
+export OPENAI_API_KEY="your_openai_api_key"
+```
+
+Run the Streamlit application:
+```streamlit run app.py```
+
 ### Setup
 Environment Variables: Set MONGO_URI and OPENAI_API_KEY in your environment.
 Install Dependencies: Run pip install -r requirements.txt (assuming a requirements.txt file with necessary libraries is present).
@@ -22,15 +53,7 @@ Start the Application:
 ```Run streamlit run [app_file_name].py```
 Use the Interface: Navigate through the sidebar menu to upload images, extract product details, or perform a vector search.
 ```http://localhost:8501/```
-### Functions
-#### get_embedding(text, model): Gets the embedding for a given text using OpenAI's API.
-#### connect_mongodb(): Connects to MongoDB and returns the collection.
-#### find_similar_documents(embedding): Finds similar documents in MongoDB based on the provided embedding.
-#### encode_image(image_bytes): Encodes the image to base64.
-#### analyze_image(image_bytes, user_prompt): Analyzes the image with OpenAI's GPT-4 Vision model.
-#### upload_photo(): Handles image uploads.
-#### products_from_photo(): Extracts products from an uploaded photo.
-#### show_products(): Displays products after a vector search.
+
 ### Disclaimer
 The application requires a valid OpenAI API key and MongoDB URI.
 The performance and accuracy of the AI model depend on the OpenAI's GPT-4 Vision model capabilities and the quality of data in MongoDB.
