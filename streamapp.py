@@ -26,7 +26,7 @@ def get_embedding(text):
 def connect_mongodb():
     mongo_client = MongoClient(MONGO_URI)
     db = mongo_client["produit"]
-    collection = db["products"]
+    collection = db["retailProducts"]
     return collection
 
 # Function to find similar documents in MongoDB based on the provided embedding.
@@ -36,14 +36,15 @@ def find_similar_documents(embedding):
         {
         "$vectorSearch": {
             "index": "vector_index",
-            "path": "docEmbedding",
+            "path": "nameEmbeddings",
             "queryVector": embedding,
             "numCandidates": 10,
             "limit": 1
             }
         },
-        {"$project": {"_id": 0, "name": 1, "subcategory" :1, "model" :1, "id":1 , "image_url":1, "raw_price":1}}
+        {"$project": {"_id": 0, "name": 1, "subcategory" :1, "model" :1, "id":1 , "variation_0_image":1, "raw_price":1}}
     ]))
+    print(documents)
     return documents
 
 # Function to encode the image to base64
@@ -142,27 +143,57 @@ def analyze_image(image_bytes, user_prompt):
 
 def upload_photo():
     st.header("Upload your product photo")
+    # Create columns
     uploaded_image = st.file_uploader("Select photo and upload", type=['jpg', 'png'])
-    if uploaded_image is not None:
-        # To read the file as bytes:
-        bytes_data = uploaded_image.getvalue()
-        # Save the uploaded image to the session state
-        st.session_state['uploaded_image'] = bytes_data
-        # To convert to a format that Streamlit can use to display the image:
-        st.image(bytes_data, caption='Uploaded photo', use_column_width=True)
+    col1, col2, col3 = st.columns([1, 2, 1]) # Adjust the ratio as needed
+    with col1:
+        # Empty column for spacing
+        st.write("")
 
+    with col2:
+        # The actual file uploader
+        
+        if uploaded_image is not None:
+            # To read the file as bytes:
+            bytes_data = uploaded_image.getvalue()
+            # Save the uploaded image to the session state
+            st.session_state['uploaded_image'] = bytes_data
+            # To convert to a format that Streamlit can use to display the image:
+            st.image(bytes_data, caption='Uploaded photo', use_column_width=True)
+    with col3:
+        # Empty column for spacing
+        st.write("")
 
 # Function to handle the chatbot interaction and product extraction
 def products_from_photo():
     st.header("Extract products from your photo")
-    user_input = st.text_area("Ask the AI to extract outfit details:", "You are a helpful AI assistant, extracting outfit products  from the photo, each product in a separate JSON format, with a detailed description. you should follow strictly the format but not the content: ```{\"product_list\": {\"```{category of product}```}\": \"```{product descriptions}```}\",\"```{category of product}```\": \"```{product descriptions}```\",\"```{category of product}```\": \"```{product descriptions}```\",\"```{category of product}```\": \"```{product descriptions}```\",\"situation\": \"```{picture the situation with this outfit}```\"```")
     
+    user_prompt = ("You are a helpful AI assistant, extracting outfit products from the photo, each product in a separate JSON format, "
+                   "with a simple description and color in French. "
+                   "You should follow strictly the format but not the content: "
+                   "```{\"product_list\": {\"{category of product}\": \"{product descriptions}\", \"{category of product}\": "
+                   "\"{product descriptions}\", \"{category of product}\": \"{product descriptions}\", "
+                   "\"{category of product}\": \"{product descriptions}\"}```")
+    user_input = st.text_area("Ask the AI to extract outfit details:", user_prompt, height=200)
+
     # Retrieve the uploaded image from the session state
     bytes_data = st.session_state.get('uploaded_image', None)
-   
+    
     if bytes_data:
         st.write("Image is present.")
-        st.image(bytes_data, caption='Uploaded Outfit', use_column_width=True)
+        col1, col2, col3 = st.columns([1, 2, 1]) # Adjust the ratio as needed
+        with col1:
+            # Empty column for spacing
+            st.write("")
+
+        with col2:
+            # The actual file uploader
+            
+            st.image(bytes_data, caption='Uploaded Outfit', use_column_width=True)
+        with col3:
+            # Empty column for spacing
+            st.write("")
+   
     else:
         st.write("No image has been uploaded yet.")
     if st.button("Extract"):
@@ -256,7 +287,7 @@ def show_products():
                     for product in vector_search_results:
                         product_name = product.get("name", "Unknown Product Name")
                         product_subcategory = product.get('subcategory', 'Unknown')
-                        product_image_url = product.get("image_url", "")
+                        product_image_url = product.get("variation_0_image", "")
 
                         # Debugging: Print the image URL
                         print("Attempting to display image URL:", product_image_url)
@@ -267,7 +298,18 @@ def show_products():
                         # Display the image if the URL is present
                         if product_image_url:
                             try:
-                                st.image(product_image_url, caption=product_name, use_column_width=True)
+                                col1, col2, col3 = st.columns([1, 2, 1]) # Adjust the ratio as needed
+                                with col1:
+                                    # Empty column for spacing
+                                    st.write("")
+
+                                with col2:
+                                    # The actual file uploader
+                                    st.image(product_image_url, caption=product_name, use_column_width=True)
+                                with col3:
+                                    # Empty column for spacing
+                                    st.write("")
+                                
                             except Exception as e:
                                 st.error(f"Error displaying image: {e}")
                         else:
@@ -286,7 +328,7 @@ def show_products():
 
 
 # Main app structure
-def main():
+def main1():
     st.sidebar.title("My Smart Products Finder")
     menu = ["Upload Photo", "Products from Photo", "Show Products"]
     choice = st.sidebar.selectbox("Menu", menu)
@@ -297,6 +339,84 @@ def main():
         products_from_photo()
     elif choice == "Show Products":
         show_products()
+# Function to use icons
+def load_fontawesome():
+    st.markdown("""
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        """, unsafe_allow_html=True)
+
+def main():
+    load_fontawesome()
+    st.sidebar.title("Mongo Smart Products Finder")
+    page = st.sidebar.radio("Select a Page", ["Homepage", "Upload", "Analysis","Products Search"])
+
+    if page == "Homepage":
+        st.title("Welcome to Mongo Smart Products Finder")
+        st.markdown("""
+            <style>
+                .icon {
+                    font-size: 22px; /* Icon size */
+                    color: #2678EC; /* Icon color */
+                }
+                h1 {
+                    color: #2678EC; /* Header color */
+                    font-size: 40px; /* Header size */
+                }
+                .feature {
+                    margin: 16px 0px;
+                    font-size: 18px; /* Feature text size */
+                }
+                .feature-header {
+                    font-weight: bold;
+                    color: #2678EC; /* Feature header color */
+                    display: block; /* Make the feature header block so icon and text are on the same line */
+                    font-size: 20px; 
+                }
+                .st-bb {
+                    border-bottom: 1px solid #2678EC;
+                }
+                .st-bb .st-eb {
+                    border-bottom: none;
+                }
+            </style>
+            """, unsafe_allow_html=True)
+
+        # Feature section with icons
+        features = {
+            "fa-search": "AI-Powered Product Analysis: Dive into detailed insights with our advanced AI.",
+            "fa-thumbs-up": "Interactive Product Recommendations: Get instant product recommendations.",
+            "fa-camera": "Visual Product Uploads: Easily upload images for detailed AI analysis.",
+            "fa-cogs": "Customizable Search Experience: Modify your search to find exactly what you want.",
+            "fa-users": "User-Friendly Interface: Sleek, modern interface for easy navigation.",
+            "fa-line-chart": "Up-to-Date Fashion Data: Stay on top of the latest trends and styles."
+        }
+
+        for icon, desc in features.items():
+            st.markdown(f"""
+                <div class="feature">
+                    <i class="fa {icon} icon"></i>
+                    <span class="feature-header">{desc.split(':')[0]}</span>
+                    <span>{desc.split(':')[1]}</span>
+                </div>
+                """, unsafe_allow_html=True)
+
+    elif page == "Upload":
+        st.title("Upload the outfit you want to get")
+        upload_photo()
+
+    elif page == "Analysis":
+        st.title("Product Analysis")
+        st.write("Product analysis details will be shown here.")
+        products_from_photo()
+    
+    elif page == "Products Search":
+        st.title("Products Search in my favorite shop")
+        st.write("Similar Products details will be shown here.")
+        show_products()
 
 if __name__ == "__main__":
     main()
+
+
+
+
