@@ -1,6 +1,7 @@
 # Mongo Multimodal Smart Products Finder
 
 My Smart Products Finder is an advanced AI-powered application designed to revolutionize your fashion and retail experience. With a sleek, user-friendly interface, this app provides detailed insights into fashion products, interactive recommendations, and up-to-date fashion data analysis.
+Demo video: https://recordit.co/En1QRevYM5
 
 ## Features
 
