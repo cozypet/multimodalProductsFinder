@@ -45,7 +45,7 @@ export OPENAI_API_KEY="your_openai_api_key"
 ```
 
 Run the Streamlit application:
-```streamlit run app.py```
+```streamlit run streamapp.py```
 
 ### Setup
 Environment Variables: Set MONGO_URI and OPENAI_API_KEY in your environment.
